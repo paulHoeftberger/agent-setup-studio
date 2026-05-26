@@ -27,8 +27,11 @@ export class WorkspaceScanner {
                 try {
                     await vscode.workspace.fs.stat(vscode.Uri.joinPath(root, item.path));
                     return { ...item, found: true };
-                } catch {
-                    return { ...item, found: false };
+                } catch (err) {
+                    if (err instanceof vscode.FileSystemError && err.code === 'FileNotFound') {
+                        return { ...item, found: false };
+                    }
+                    throw err;
                 }
             })
         );
