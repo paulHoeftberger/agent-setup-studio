@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { WizardPanel } from './webview/wizardPanel';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -14,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	const disposable = vscode.commands.registerCommand('agentSetupStudio.start', () => {
-		vscode.window.showInformationMessage('Agent Setup Studio started');
+		WizardPanel.createOrShow();
 	});
 
 	context.subscriptions.push(disposable);
