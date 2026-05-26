@@ -1,13 +1,18 @@
 import * as vscode from 'vscode';
+import { ScanResult } from '../types/workspaceScan';
 
 export class WizardPanel {
     private static currentPanel: WizardPanel | undefined;
 
     private readonly _panel: vscode.WebviewPanel;
     private _disposables: vscode.Disposable[] = [];
+    private _scanResult: ScanResult;
 
-    public static createOrShow(): void {
+    public static createOrShow(scanResult: ScanResult): void {
         if (WizardPanel.currentPanel) {
+            WizardPanel.currentPanel._scanResult = scanResult;
+            WizardPanel.currentPanel._panel.webview.html =
+                WizardPanel.currentPanel._getHtmlContent();
             WizardPanel.currentPanel._panel.reveal();
             return;
         }
@@ -19,11 +24,12 @@ export class WizardPanel {
             { enableScripts: false }
         );
 
-        WizardPanel.currentPanel = new WizardPanel(panel);
+        WizardPanel.currentPanel = new WizardPanel(panel, scanResult);
     }
 
-    private constructor(panel: vscode.WebviewPanel) {
+    private constructor(panel: vscode.WebviewPanel, scanResult: ScanResult) {
         this._panel = panel;
+        this._scanResult = scanResult;
         this._panel.webview.html = this._getHtmlContent();
 
         this._panel.onDidDispose(
@@ -45,7 +51,22 @@ export class WizardPanel {
 
     private _getHtmlContent(): string {
         const nonce = Math.random().toString(36).slice(2);
-        const csp = `default-src 'none'; style-src ${this._panel.webview.cspSource} 'nonce-${nonce}';`;
+        const csp = `default-src 'none'; style-src ${this._panel.webview.cspSource} 'nonce-${nonce}' 'unsafe-inline';`;
+        const scanRows = this._scanResult
+            .map(item => {
+                const icon = item.found ? '✓' : '✗';
+                const style = item.found
+                    ? 'color: var(--vscode-testing-iconPassed)'
+                    : 'color: var(--vscode-testing-iconFailed)';
+                const name = item.name
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+                return `<li><span style="${style}">${icon}</span> <code>${name}</code></li>`;
+            })
+            .join('\n        ');
         return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,6 +117,10 @@ export class WizardPanel {
         <li><code>docs/coding-guidelines.md</code></li>
         <li><code>docs/architecture.md</code></li>
         <li><code>docs/roadmap.md</code></li>
+    </ul>
+    <h2>Detected Project Context</h2>
+    <ul>
+        ${scanRows}
     </ul>
     <button disabled>Start Setup</button>
 </body>
