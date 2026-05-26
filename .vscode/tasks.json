@@ -1,0 +1,74 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "compile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "label": "npm: compile",
+      "presentation": {
+        "reveal": "always"
+      },
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/d", "/c"]
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "watch:esbuild",
+      "group": "build",
+      "problemMatcher": [],
+      "isBackground": true,
+      "label": "npm: watch:esbuild",
+      "presentation": {
+        "group": "watch",
+        "reveal": "never"
+      },
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/d", "/c"]
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "watch:tsc",
+      "group": "build",
+      "problemMatcher": [],
+      "isBackground": true,
+      "label": "npm: watch:tsc",
+      "presentation": {
+        "group": "watch",
+        "reveal": "never"
+      },
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/d", "/c"]
+        }
+      }
+    },
+    {
+      "label": "watch",
+      "dependsOn": [
+        "npm: watch:tsc",
+        "npm: watch:esbuild"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never"
+      },
+      "group": "build"
+    }
+  ]
+}
