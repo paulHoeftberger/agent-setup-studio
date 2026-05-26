@@ -44,14 +44,16 @@ export class WizardPanel {
     }
 
     private _getHtmlContent(): string {
+        const nonce = Math.random().toString(36).slice(2);
+        const csp = `default-src 'none'; style-src ${this._panel.webview.cspSource} 'nonce-${nonce}';`;
         return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="${csp}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agent Setup Studio</title>
-    <style>
+    <style nonce="${nonce}">
         body {
             font-family: var(--vscode-font-family);
             font-size: var(--vscode-font-size);
