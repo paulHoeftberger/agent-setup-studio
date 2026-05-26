@@ -51,7 +51,7 @@ export class WizardPanel {
 
     private _getHtmlContent(): string {
         const nonce = Math.random().toString(36).slice(2);
-        const csp = `default-src 'none'; style-src ${this._panel.webview.cspSource} 'nonce-${nonce}';`;
+        const csp = `default-src 'none'; style-src ${this._panel.webview.cspSource} 'nonce-${nonce}' 'unsafe-inline';`;
         const scanRows = this._scanResult
             .map(item => {
                 const icon = item.found ? '✓' : '✗';
