@@ -8,7 +8,7 @@ export class WizardPanel {
 
     public static createOrShow(): void {
         if (WizardPanel.currentPanel) {
-            WizardPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
+            WizardPanel.currentPanel._panel.reveal();
             return;
         }
 
