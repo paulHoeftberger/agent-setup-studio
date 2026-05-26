@@ -55,8 +55,16 @@ export class WizardPanel {
         const scanRows = this._scanResult
             .map(item => {
                 const icon = item.found ? '✓' : '✗';
-                const style = item.found ? 'color: var(--vscode-testing-iconPassed)' : 'color: var(--vscode-testing-iconFailed)';
-                return `<li><span style="${style}">${icon}</span> <code>${item.name}</code></li>`;
+                const style = item.found
+                    ? 'color: var(--vscode-testing-iconPassed)'
+                    : 'color: var(--vscode-testing-iconFailed)';
+                const name = item.name
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+                return `<li><span style="${style}">${icon}</span> <code>${name}</code></li>`;
             })
             .join('\n        ');
         return `<!DOCTYPE html>
