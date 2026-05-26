@@ -8,9 +8,9 @@ const ITEMS_TO_SCAN: Array<{ name: string; path: string }> = [
     { name: '.github/copilot-instructions.md', path: '.github/copilot-instructions.md' },
     { name: 'AGENTS.md', path: 'AGENTS.md' },
     { name: 'CLAUDE.md', path: 'CLAUDE.md' },
-    { name: 'docs/ARCHITECTURE.md', path: 'docs/ARCHITECTURE.md' },
-    { name: 'docs/CODING_GUIDELINES.md', path: 'docs/CODING_GUIDELINES.md' },
-    { name: 'docs/ROADMAP.md', path: 'docs/ROADMAP.md' },
+    { name: 'docs/architecture.md', path: 'docs/architecture.md' },
+    { name: 'docs/coding-guidelines.md', path: 'docs/coding-guidelines.md' },
+    { name: 'docs/roadmap.md', path: 'docs/roadmap.md' },
 ];
 
 export class WorkspaceScanner {
